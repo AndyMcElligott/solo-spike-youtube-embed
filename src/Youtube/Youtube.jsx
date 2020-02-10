@@ -13,10 +13,33 @@ import YouTube from 'react-youtube';
 
 class YoutubeDemo extends Component {
 
-    videoOnReady(event) {
-        event.target.pauseVideo()
-        console.log(event.target)
+    state = {
+        playerObj : ''
     }
+
+    videoOnReady (event) {
+        // access to player in all event handlers via event.target
+        const player = event.target
+        //set video to play at a certain time
+        player.seekTo(50)
+        console.log(event.target)
+      }
+      videoOnPlay (event) {
+        // access to player in all event handlers via event.target
+        // event.target.playVideoAt(50) // 50 seconds
+        const player = event.target
+        console.log(player.getCurrentTime())
+      }
+      videoStateChange (event) {
+        const player = event.target
+        console.log(player.getCurrentTime())
+      }
+    
+    //   componentWillUnmount () {
+    //     const {playerObj} = this.state
+    //     // saves the time the user was at inthe video when leaving page, can be sent to back end, store, DB etc.
+    //     console.log(player.getCurrentTime())
+    //   }
 
     render() {
         const opts = {
@@ -27,12 +50,14 @@ class YoutubeDemo extends Component {
             }
         };
 
-        const {videoId} = this.props
+        const {videoId} = this.props;
         return (
             <YouTube
                 videoId={videoId}
                 opts={opts}
                 onReady={this.videoOnReady}
+                onPlay={this.videoOnPlay}
+                onStateChange={this.videoStateChange}
             />
         );
     }
